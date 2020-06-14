@@ -2,8 +2,8 @@
 
 """Referee program for gobang
 
-Written by previous TA for CS 165A, Winter 2016 ... Winter 2017
-Updated by Karl Wang for CS 165A, Spring 2020
+Note: I did not write this referee.py file. This was written by a TA from CS165A Winter 2016 ... Winter 2017
+and Updated by Karl Wang for CS 165A, Spring 2020 at UC Santa Barbara
 
   Usage:
     referee.py board_size path_to_light_player path_to_dark_player
