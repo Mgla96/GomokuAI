@@ -8,7 +8,7 @@ Created an AI to play Gomoku, otherwise known as Five in a Row. Gomoku is like t
 **convertKeyToArr** - This is used for the getCoordsAround function which converts dictionary keys in getCoordsAround to corresponding indexes for the game board<br/>
 **getRandomMove** - This Function creates a random move if my program somehow can not decide on a correct move in time<br/>
 **btsConvert** - This function gets all the columns, rows, and diagonals of the numpy board array and converts it to string arrays for easier computation in the points function.<br/>
-**patterns** - This is a dictionary of all move patters with assigned point weights<br/>
+**patterns** - This is a dictionary of all move patterns with assigned point weights<br/>
 **points** - This function evaluates the game board based on a potential move suggested through the minimax function and returns a value of how many points this corresponds to based on patterns it sees on the game board for horizontal, vertical, diagonal down, and diagonal up orders. Each pattern has two versions, one where the player has the pattern and one where the opponent has the pattern in the patterns dictionary. If the opponent has the pattern, the weight of the pattern is negative and if the player has it, the weight is positive. This way after summing all of the weights we will get the total points for the player which is all the points for players moves minus all the points for opponents moves. For my patterns I included variations of four in a row with openings on both sides, three in a row with side blocked, three in a row with openings on both sides, four in a row but with a gap somewhere in between, three in a row but with a gap inbetween, etc...<br/>
 **minimax** - Function which applies the Mini-Max algorithm with alpha beta pruning. It also uses the points function to determine how beneficial a move is and returns the beneficial point score. This is then used in the computer function where the ai will choose to place it's stone where the highest beneficial point score is.<br/>
 **computer** - This function handles the computer's move. It is the first Maximizer of the minimax function. The only difference is that instead of just returning a point score like the minimax function, this returns the best mvoe as well. This function calls the minimizer in the minimax board.<br/>
@@ -20,6 +20,28 @@ My search function uses a minimax algorithm with alpha beta pruning. The minimax
 
 ## How To Run
 
+### Player VS AI
+
+You can use -n followed by size of grid you would like for game.
+-l means that the player is the light stones and therefore the ai will go first since the dark stone always goes first in gomoku.
+without -l the player is the dark stone and will go first.
+
+**examples**
+```bash
+python3 gobang.py -n 11
+```
+```bash
+python3 gobang.py -n 8 -l
+```
+
 ### AI VS AI
 
-### Player VS AI
+You can choose what game board size for the AI's to compete on. The AI is ./gobang where the rightmost ai will be the dark stone. 
+
+**example**
+```bash
+python3 referee.py 11 ./gobang ./gobang
+```
+
+## How To Play
+lowercase alphabet letters represent the columns and numbers starting from 1 represent the rows. The program will print out on the command line what move you will like to make as well as the moves the ai has made in this format. It will only accepts moves such as "a5" or "d8" for example. 
