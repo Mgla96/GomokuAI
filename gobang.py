@@ -14,7 +14,6 @@ board[row][column]
 def getCoordsAround(board_size, board):
     '''
     get points around placed stones
-    getCoordsAroundTime 0.00011587142944335938 sometimes
     '''
     outTpl = np.nonzero(board)  # return tuple of all non zero points on board
     potentialValsCoord = {}
@@ -22,25 +21,25 @@ def getCoordsAround(board_size, board):
     for i in range(len1):
         y = outTpl[0][i]
         x = outTpl[1][i]
-        if(y > 0):
+        if y > 0:
             potentialValsCoord[(x, y-1)] = 1
-            if(x > 0):
+            if x > 0:
                 potentialValsCoord[(x-1, y-1)] = 1
-            if(x < (board_size-1)):
+            if x < (board_size-1):
                 potentialValsCoord[(x+1, y-1)] = 1
-        if(x > 0):
+        if x > 0:
             potentialValsCoord[(x-1, y)] = 1
-            if(y < (board_size-1)):
+            if y < (board_size-1):
                 potentialValsCoord[(x-1, y+1)] = 1
-        if(y < (board_size-1)):
+        if y < (board_size-1):
             potentialValsCoord[(x, y+1)] = 1
-            if(x < (board_size-1)):
+            if x < (board_size-1):
                 potentialValsCoord[(x+1, y+1)] = 1
-            if(x > 0):
+            if x > 0:
                 potentialValsCoord[(x-1, y+1)] = 1
-        if(x < (board_size-1)):
+        if x < (board_size-1):
             potentialValsCoord[(x+1, y)] = 1
-            if(y > 0):
+            if y > 0:
                 potentialValsCoord[(x+1, y-1)] = 1
     finalValsX, finalValsY = [], []
     for key in potentialValsCoord:
@@ -82,28 +81,28 @@ def getRandomMove(board, boardSize):
     For choosing random move when can't decide propogated to center
     '''
     ctr = 0
-    idx = math.floor(boardSize/2)
+    idx = boardSize//2
     while ctr < (idx/2):
-        if(board[idx+ctr][idx+ctr]) == 0:
+        if board[idx+ctr][idx+ctr] == 0:
             return idx+ctr, idx+ctr
-        elif(board[idx+ctr][idx-ctr]) == 0:
+        elif board[idx+ctr][idx-ctr] == 0:
             return idx+ctr, idx-ctr
-        elif(board[idx+ctr][idx]) == 0:
+        elif board[idx+ctr][idx] == 0:
             return idx+ctr, idx
-        elif(board[idx][idx+ctr]) == 0:
+        elif board[idx][idx+ctr] == 0:
             return idx, idx+ctr
-        elif(board[idx][idx-ctr] == 0):
+        elif board[idx][idx-ctr] == 0:
             return idx, idx-ctr
-        elif(board[idx-ctr][idx] == 0):
+        elif board[idx-ctr][idx] == 0:
             return idx-ctr, idx
-        elif(board[idx-ctr][idx-ctr] == 0):
+        elif board[idx-ctr][idx-ctr] == 0:
             return idx-ctr, idx-ctr
-        elif(board[idx-ctr][idx+ctr] == 0):
+        elif board[idx-ctr][idx+ctr] == 0:
             return idx-ctr, idx+ctr
         ctr += 1
     for i in range(boardSize):
         for j in range(boardSize):
-            if(board[i][j] == 0):
+            if board[i][j] == 0:
                 return i, j
 
 
@@ -112,10 +111,8 @@ def btsConvert(board, player):
     convert board to col,row,and diag string arrays for easier interpreting 
     '''
     cList, rList, dList = [], [], []
-    bdiag = [board.diagonal(i) for i in range(
-        board.shape[1]-5, -board.shape[1]+4, -1)]
-    fdiag = [board[::-1, :].diagonal(i)
-             for i in range(board.shape[1]-5, -board.shape[1]+4, -1)]
+    bdiag = [board.diagonal(i) for i in range(board.shape[1]-5, -board.shape[1]+4, -1)]
+    fdiag = [board[::-1, :].diagonal(i) for i in range(board.shape[1]-5, -board.shape[1]+4, -1)]
     for dgd in bdiag:
         bdiagVals = ""
         for point in dgd:
@@ -163,7 +160,6 @@ def btsConvert(board, player):
 def points(board, player):  # evaluates
     '''
     assigns points for moves
-    time for 11 board: ~0.0012657642364501953 or less thanks to dictionaries
     '''
     val = 0
     player1StrArr = btsConvert(board, player)
@@ -174,13 +170,13 @@ def points(board, player):  # evaluates
             n = j+5
             if(n <= len1):
                 st = player1StrArr[i][j:n]
-                if(st in patterns):
+                if st in patterns:
                     val += patterns[st]
         for j in range(len1):
             n = j+6
             if(n <= len1):
                 st = player1StrArr[i][j:n]
-                if(st in patterns):
+                if st in patterns:
                     val += patterns[st]
     return val
 
@@ -189,11 +185,7 @@ def otherPlayerStone(player):
     '''
     Stones are 1 or 2 based on player. Just gets other player's stone
     '''
-    if(player == 1):
-        return 2
-    else:
-        return 1
-
+    return 2 if player==1 else 1
 
 def minimax(board, isMaximizer, depth, alpha, beta, player):  # alpha, beta
     '''
@@ -202,15 +194,15 @@ def minimax(board, isMaximizer, depth, alpha, beta, player):  # alpha, beta
     beta is best already explored option along path to root for minimizer(AI Opponent)
     '''
     point = points(board, player)
-    if(depth == 2 or point>=20000000 or point<=-20000000):
+    if depth == 2 or point>=20000000 or point<=-20000000:
         return point
     size = len(board)
-    if(isMaximizer):  # THE MAXIMIZER
+    if isMaximizer:  # THE MAXIMIZER
         best = MIN
         potentialValsX, potentialValsY = getCoordsAround(size, board)
         len1 = len(potentialValsX)
         for i in range(len1):
-            if (board[potentialValsY[i]][potentialValsX[i]] == 0):
+            if board[potentialValsY[i]][potentialValsX[i]] == 0:
                 board[potentialValsY[i]][potentialValsX[i]] = player
                 score = minimax(board, False, depth+1, alpha, beta, player)
                 best = max(best, score)
@@ -224,7 +216,7 @@ def minimax(board, isMaximizer, depth, alpha, beta, player):  # alpha, beta
         potentialValsX, potentialValsY = getCoordsAround(size, board)
         len1 = len(potentialValsX)
         for i in range(len1):
-            if (board[potentialValsY[i]][potentialValsX[i]] == 0):
+            if board[potentialValsY[i]][potentialValsX[i]] == 0:
                 otherplayer = otherPlayerStone(player)
                 board[potentialValsY[i]][potentialValsX[i]] = otherplayer
                 score = minimax(board, True, depth+1, alpha, beta, player)
@@ -241,34 +233,32 @@ def computer(board_size, board, isComputerFirst):
     Chooses best move for computer
     Max that gives index and calls min in minimax 
     '''
-    mostPoints = -math.inf
-    alpha = MIN
-    beta = MAX
-    if(isComputerFirst):
+    mostPoints = float('-inf')
+    alpha,beta = MIN,MAX
+    if isComputerFirst:
         mark = 1
     else:
         mark = 2
-    bestMoveRow = -1
-    bestMoveCol = -1
+    bestMoveRow = bestMoveCol = -1
     boardSize = len(board)
     potentialValsX, potentialValsY = getCoordsAround(board_size, board)
     len1 = len(potentialValsX)
     for i in range(len1):
-        if(board[potentialValsY[i]][potentialValsX[i]] == 0):
+        if board[potentialValsY[i]][potentialValsX[i]] == 0:
             board[potentialValsY[i]][potentialValsX[i]] = mark
             movePoints = max(mostPoints, minimax(
                 board, False, 1, alpha, beta, mark))
             alpha = max(alpha, movePoints)
             board[potentialValsY[i]][potentialValsX[i]] = 0
-            if(beta <= alpha):
+            if beta <= alpha:
                 break
-            if(movePoints > mostPoints):
+            if movePoints > mostPoints:
                 bestMoveRow = potentialValsY[i]
                 bestMoveCol = potentialValsX[i]
                 mostPoints = movePoints
-                if(movePoints >= 20000000):
+                if movePoints >= 20000000:
                     break
-    if(bestMoveRow == -1 or bestMoveCol == -1):  # ' when still -1
+    if bestMoveRow == -1 or bestMoveCol == -1:  # ' when still -1
         bestMoveRow, bestMoveCol = getRandomMove(board, boardSize)
     board[bestMoveRow][bestMoveCol] = mark
     move = convertArrToMove(bestMoveRow, bestMoveCol)  # row,col
@@ -282,12 +272,12 @@ def playGame(humanFirst, board_size, board):
     playing = True
     moveNum = 0
     while playing:
-        if(humanFirst):  # human dark so goes first
+        if humanFirst:  # human dark so goes first
             while True:
                 val = input("move:")
                 col = val[0]  # letter
                 row = val[1:]  # number
-                if(col.isalpha() and row.isalnum()):
+                if col.isalpha() and row.isalnum():
                     colVal, rowVal = convertMoveToArr(col, row)
                     if colVal < board_size and colVal >= 0 and rowVal < board_size and rowVal >= 0 and board[rowVal][colVal] == 0:
                         board[rowVal][colVal] = 1
@@ -300,7 +290,7 @@ def playGame(humanFirst, board_size, board):
             # then computer
             print("Move played:", val)
             moveNum += 1
-            if(moveNum == 1):
+            if moveNum == 1:
                 moveArr = getRandomMove(board, board_size)
                 move = convertArrToMove(moveArr[0], moveArr[1])
                 board[moveArr[0], moveArr[1]] = 2
@@ -310,9 +300,9 @@ def playGame(humanFirst, board_size, board):
             print(board)
         else:  # human light so computer first
             # computer first
-            if(moveNum == 0):  # first move best off just placing in center of board
+            if moveNum == 0:  # first move best off just placing in center of board
                 idx = math.floor(board_size/2)
-                if(board_size % 2 == 0):
+                if board_size % 2 == 0:
                     board[idx-1][idx-1] = 1
                     move = convertArrToMove(idx-1, idx-1)
                 else:
@@ -328,7 +318,7 @@ def playGame(humanFirst, board_size, board):
                 val = input("move:")
                 col = val[0]  # letter
                 row = val[1:]  # number
-                if(col.isalpha() and row.isalnum()):
+                if col.isalpha() and row.isalnum():
                     colVal, rowVal = convertMoveToArr(col, row)
                     if colVal < board_size and colVal >= 0 and rowVal < board_size and rowVal >= 0 and board[rowVal][colVal] == 0:
                         board[rowVal][colVal] = 2
@@ -352,9 +342,9 @@ if __name__ == "__main__":
     humanFirst = True  # human plays with dark color so human goes first
     size = 11  # if size not specified default 11*11
     for i in range(1, len(sys.argv)):
-        if(sys.argv[i] == "-n"):
+        if sys.argv[i] == "-n":
             size = sys.argv[i+1]
-        elif(sys.argv[i] == "-l"):
+        if sys.argv[i] == "-l":
             humanFirst = False  # human plays with light colors so computer goes first
     board = np.zeros((int(size), int(size)))
     # for alpha beta
