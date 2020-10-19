@@ -17,8 +17,7 @@ def getCoordsAround(board_size, board):
     '''
     outTpl = np.nonzero(board)  # return tuple of all non zero points on board
     potentialValsCoord = {}
-    len1 = len(outTpl[0])
-    for i in range(len1):
+    for i in range(len(outTpl[0])):
         y = outTpl[0][i]
         x = outTpl[1][i]
         if y > 0:
@@ -163,8 +162,7 @@ def points(board, player):  # evaluates
     '''
     val = 0
     player1StrArr = btsConvert(board, player)
-    tot = len(player1StrArr)
-    for i in range(tot):
+    for i in range(len(player1StrArr)):
         len1 = len(player1StrArr[i])
         for j in range(len1):
             n = j+5
@@ -200,8 +198,7 @@ def minimax(board, isMaximizer, depth, alpha, beta, player):  # alpha, beta
     if isMaximizer:  # THE MAXIMIZER
         best = MIN
         potentialValsX, potentialValsY = getCoordsAround(size, board)
-        len1 = len(potentialValsX)
-        for i in range(len1):
+        for i in range(len(potentialValsX)):
             if board[potentialValsY[i]][potentialValsX[i]] == 0:
                 board[potentialValsY[i]][potentialValsX[i]] = player
                 score = minimax(board, False, depth+1, alpha, beta, player)
@@ -214,8 +211,7 @@ def minimax(board, isMaximizer, depth, alpha, beta, player):  # alpha, beta
     else:  # THE MINIMIZER
         best = MAX
         potentialValsX, potentialValsY = getCoordsAround(size, board)
-        len1 = len(potentialValsX)
-        for i in range(len1):
+        for i in range(len(potentialValsX)):
             if board[potentialValsY[i]][potentialValsX[i]] == 0:
                 otherplayer = otherPlayerStone(player)
                 board[potentialValsY[i]][potentialValsX[i]] = otherplayer
@@ -242,8 +238,7 @@ def computer(board_size, board, isComputerFirst):
     bestMoveRow = bestMoveCol = -1
     boardSize = len(board)
     potentialValsX, potentialValsY = getCoordsAround(board_size, board)
-    len1 = len(potentialValsX)
-    for i in range(len1):
+    for i in range(len(potentialValsX)):
         if board[potentialValsY[i]][potentialValsX[i]] == 0:
             board[potentialValsY[i]][potentialValsX[i]] = mark
             movePoints = max(mostPoints, minimax(
